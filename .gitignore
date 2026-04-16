@@ -1,0 +1,14 @@
+# Node
+node_modules
+
+# Build
+dist/
+build/
+
+# Keep environment variables out of version control
+.env
+
+/generated/prisma
+
+# Archivos de cache de TS
+*.tsbuildinfo

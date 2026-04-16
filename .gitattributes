@@ -1,0 +1,29 @@
+# =========================
+# Configuración general
+# =========================
+* text=auto
+
+# =========================
+# Archivos de código
+# =========================
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.js   text eol=lf
+*.json text eol=lf
+*.prisma text eol=lf
+*.sql  text eol=lf
+*.toml text eol=lf
+
+# =========================
+# Archivos de configuración
+# =========================
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.env.example text eol=lf
+
+# =========================
+# Archivos de sistema
+# =========================
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
