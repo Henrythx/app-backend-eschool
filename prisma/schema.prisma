@@ -19,13 +19,14 @@ datasource db {
 // MODELO DE USUARIO
 // =====================
 model Usuario {
-  id           Int      @id @default(autoincrement())
-  nombre       String
-  apellido     String
-  email        String   @unique
-  passwordHash String
-  rol          String   // enum: "Admin" | "Docente" | "Alumno"
-  genero       String
+  id            Int      @id @default(autoincrement())
+  dni           String
+  nombre        String
+  apellido      String
+  email         String   @unique
+  passwordHash  String
+  rol           String   // enum: "Admin" | "Docente" | "Alumno"
+  genero        String
 
   alumno  Alumno?
   docente Docente?
@@ -65,9 +66,9 @@ model Docente {
 // MODELO DE GRADO
 // =====================
 model Grado {
-  id     Int    @id @default(autoincrement())
-  nivel  String // enum: "inicial" | "primaria" | "secundaria"
-  año    Int
+  id        Int    @id @default(autoincrement())
+  nivel     String // enum: "inicial" | "primaria" | "secundaria"
+  year      Int
 
   materias  GradoMateria[]
   alumnos   Alumno[]
