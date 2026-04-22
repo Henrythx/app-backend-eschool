@@ -10,7 +10,7 @@ export class MateriaEntity {
     ) {}
 
 
-    static fromObject(obj: any): MateriaEntity {
+    static fromObject(obj: {[key: string]: any}): MateriaEntity {
         if (!obj.id) 
             throw CustomError.badRequest("Id requerido");
         if (!obj.nombre) 

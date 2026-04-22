@@ -8,7 +8,7 @@ export class AreaEntity {
     ) {}
 
 
-    static fromObject(obj: any): AreaEntity {
+    static fromObject(obj: {[key: string]: any}): AreaEntity {
         if (!obj.id) 
             throw CustomError.badRequest("Id requerido");
         if (!obj.nombre) 

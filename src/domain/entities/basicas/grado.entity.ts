@@ -7,7 +7,7 @@ export class GradoEntity {
         public year: number,
     ) {}
 
-    static fromObject(obj: any): GradoEntity {
+    static fromObject(obj: {[key: string]: any}): GradoEntity {
         if (!obj.id) 
             throw CustomError.badRequest("Id requerido");
         if (!["inicial","primaria","secundaria"].includes(obj.nivel))
