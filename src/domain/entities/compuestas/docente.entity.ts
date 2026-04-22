@@ -6,7 +6,7 @@ export class DocenteEntity {
     constructor(
         public readonly id: number,
         public usuario      : UsuarioEntity,
-        public especialidad : string,
+        public especialidad : string | null,
         public readonly createdAt: Date,
         public readonly updatedAt: Date,
     ) {}

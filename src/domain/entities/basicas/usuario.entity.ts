@@ -27,10 +27,10 @@ export class UsuarioEntity {
             throw CustomError.badRequest("Email requerido");
         if(!obj.passwordHash) 
             throw CustomError.internalServer("PasswordHash requerido");
-        if(!["Admin","Docente","Alumno"].includes(obj.rol))
+        if(!["ADMIN","DOCENTE","ALUMNO"].includes(obj.rol))
             throw CustomError.unprocessable("Rol inválido");
         if(!["M","F"].includes(obj.genero))
-            throw CustomError.unprocessable("Genero invalido")
+            throw CustomError.unprocessable("Género invalido")
 
         return new UsuarioEntity(
             obj.id,
