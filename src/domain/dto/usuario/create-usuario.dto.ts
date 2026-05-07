@@ -18,25 +18,25 @@ export class CreateUsuarioDTO {
 
 
         if (!dni || typeof dni !== "string") 
-            throw CustomError.badRequest("DNI inválido");
+            throw CustomError.badRequest("CreateUsuarioDTO: DNI inválido");
 
         if (!nombre || typeof nombre !== "string") 
-            throw CustomError.badRequest("Nombre inválido");
+            throw CustomError.badRequest("CreateUsuarioDTO: Nombre inválido");
         
         if (!apellido || typeof apellido !== "string") 
-            throw CustomError.badRequest("Apellido inválido");
+            throw CustomError.badRequest("CreateUsuarioDTO: Apellido inválido");
         
         if (!email || typeof email !== "string") 
-            throw CustomError.badRequest("Email inválido");
+            throw CustomError.badRequest("CreateUsuarioDTO: Email inválido");
         
         if (!passwordHash || typeof passwordHash !== "string") 
-            throw CustomError.internalServer("PasswordHash inválido");
+            throw CustomError.badRequest("CreateUsuarioDTO: PasswordHash inválido");
         
         if (!["ADMIN","DOCENTE","ALUMNO"].includes(rol)) 
-            throw CustomError.unprocessable("Rol inválido");
+            throw CustomError.unprocessable("CreateUsuarioDTO: Rol inválido");
         
         if (!["M","F"].includes(genero)) 
-            throw CustomError.unprocessable("Género inválido");
+            throw CustomError.unprocessable("CreateUsuarioDTO: Género inválido");
 
 
         return new CreateUsuarioDTO(

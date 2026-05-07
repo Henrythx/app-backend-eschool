@@ -5,8 +5,12 @@ export class CustomError extends Error {
         public readonly details? : any          // OPCIONAL : Información extra
     ) {
         super(message);
-        Object.setPrototypeOf(this, new.target.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);  
     }
+    
+    // new target apunta al constructor que realmente se invoco
+    // console.log(err instanceof CustomError);     // ✅ true
+    // console.log(err instanceof Error);           // ✅ true
 
 
     static badRequest(message: string, details?: any){
@@ -24,7 +28,7 @@ export class CustomError extends Error {
     }
 
 
-    static notFaund(message: string){
+    static notFound(message: string){
         return new CustomError(404, message);
     }
 
