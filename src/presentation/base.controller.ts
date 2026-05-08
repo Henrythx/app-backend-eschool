@@ -68,7 +68,8 @@ export abstract class Controller <TEntity, TCreateDTO, TUpdateDTO>{
 
     public update = async (req: Request, res: Response) => {
         try {
-            const dto = await this.updateDTO(req.body);
+            const dto = await this.updateDTO({...req.body, id: +req.params.id});
+            console.log("controller basico - update - dto", dto);
             const resultado = await this.service.update(dto);
 
             res.json(resultado);

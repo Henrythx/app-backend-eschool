@@ -17,8 +17,12 @@ export class GradoPrismaRepository implements GradoRepository {
 
     async findById(id: number): Promise<GradoEntity | null> {
         const grado = await this.prisma.grado.findUnique({
-            where: {id}
+            where: {id},
+            include: {materias: { include: {materia: { include: {area: true} }}}}, // Incluir las materias relacionadas, y dentro su área
+            //include: { materias: { include: {materia: true} }} // Incluir las materias relacionadas
         })
+        console.log("grado prisma repo - findById");
+        console.log(grado);
         return grado
             ? GradoEntity.fromObject(grado)
             : null;
@@ -47,18 +51,16 @@ export class GradoPrismaRepository implements GradoRepository {
                             }
                         :   undefined
                 },
-                include: {
-                    materias: { include: {materia: true}},
-                },
+                include: {materias: { include: {materia: { include: {area: true} }}}}, // Incluir las materias relacionadas, y dentro su área
             });
 
             return GradoEntity.fromObject(grado);  
              
         } catch (err: any) {
             if(err.code === "P2002"){
-                throw CustomError.conflict("Ya existe una materia con ese nombre");
+                throw CustomError.conflict("GradoRepository: Ya existe un grado con ese nivel y año");
             }
-            throw CustomError.internalServer("Error al crear la materia: "+err.message);
+            throw CustomError.internalServer("GradoRepository: Error al crear el grado: "+err.message);
         }
     }
 
@@ -80,18 +82,17 @@ export class GradoPrismaRepository implements GradoRepository {
                             }
                         :   undefined
                 },
-                include: {
-                    materias: { include: {materia: true}},
-                },
+                include: {materias: { include: {materia: { include: {area: true} }}}}, // Incluir las materias relacionadas, y dentro su área
+
             });
 
             return GradoEntity.fromObject(grado);
             
         } catch (err: any) {
             if (err.code === "P2025"){
-                throw CustomError.notFound("Usuario no encontrada");
+                throw CustomError.notFound("GradoRepository: Grado no encontrado");
             }
-            throw CustomError.internalServer("Error al actualizar el grado: " + err.message);
+            throw CustomError.internalServer("GradoRepository: Error al actualizar el grado: " + err.message);
         }
     }
 

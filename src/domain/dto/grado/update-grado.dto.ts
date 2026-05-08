@@ -11,9 +11,8 @@ export class UpdateGradoDTO {
 
     
     static create(obj: { [key: string]: any }): UpdateGradoDTO {
-        const { nivel, year, materiasIds } = obj;
-
-        if(!obj.id || isNaN(Number(obj.id)))
+        const { id, nivel, year, materiasIds } = obj;
+        if(!id || isNaN(Number(id)))
             throw CustomError.badRequest("UpdateGradoDTO: ID inválido");
 
         if (!nivel || !["inicial","primaria","secundaria"].includes(nivel)) 
@@ -26,6 +25,6 @@ export class UpdateGradoDTO {
             throw CustomError.badRequest("UpdateGradoDTO: MateriasIds debe ser un array de números");
         }
         
-        return new UpdateGradoDTO(Number(obj.id), nivel, Number(year), materiasIds);
+        return new UpdateGradoDTO(Number(id), nivel, Number(year), materiasIds);
     }
 }

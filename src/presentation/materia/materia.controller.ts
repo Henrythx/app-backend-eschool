@@ -3,12 +3,13 @@ import { CreateMateriaDTO } from "../../domain/dto/materia/create-materia.dto";
 import { MateriaEntity } from "../../domain/entities";
 import { MateriaService } from "../../domain/service/materia.service";
 import { Controller } from "../base.controller";
+import { UpdateMateriaDTO } from "../../domain/dto/materia/update-materia.dto";
 
 export class MateriaController extends Controller
-<MateriaEntity, CreateMateriaDTO, CreateMateriaDTO>
+<MateriaEntity, CreateMateriaDTO, UpdateMateriaDTO>
 {
     constructor(service: MateriaService){
-        super(service, CreateMateriaDTO, CreateMateriaDTO);
+        super(service, CreateMateriaDTO, UpdateMateriaDTO);
     }
     
 

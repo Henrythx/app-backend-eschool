@@ -22,34 +22,5 @@ extends ServiceBase<MateriaEntity, CreateMateriaDTO, UpdateMateriaDTO, MateriaRe
         return await this.repo.findAllByAreaId(id);
     }
 
-    
-    async findById(id: number): Promise<MateriaEntity | null> {
-        const resultado = await this.repo.findById(id);
-        if(!resultado) throw CustomError.notFound("Materia no encontrada");
-        
-        return resultado;
-    }
-    
-
-    async findAll(): Promise<MateriaEntity[]> {
-        return await this.repo.findAll();
-    }
-
-
-    async create(dto: CreateMateriaDTO): Promise<MateriaEntity> {
-        return await this.repo.create(dto);
-    }
-
-
-
-    async update(dto: UpdateMateriaDTO): Promise<MateriaEntity> {
-        return await this.repo.update(dto);
-    }
-
-
-
-    async deleteById(id: number): Promise<MateriaEntity | null> {
-        return await this.repo.deleteById(id);
-    }
 
 }

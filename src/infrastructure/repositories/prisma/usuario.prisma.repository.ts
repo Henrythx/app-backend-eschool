@@ -35,7 +35,7 @@ export class UsuarioPrismaRepository implements UsuarioRepository{
                     dni: dto.dni,
                     nombre : dto.nombre,
                     apellido: dto.apellido,
-                    email: dto.email,
+                    email: dto.email,               // unico
                     passwordHash: dto.passwordHash,
                     rol: dto.rol,
                     genero: dto.genero
@@ -46,9 +46,9 @@ export class UsuarioPrismaRepository implements UsuarioRepository{
 
         } catch (error: any)  {
             if (error.code === "P2002") {
-                throw CustomError.conflict("Ya existe un producto con ese nombre");
+                throw CustomError.conflict("Ya existe un usuario con ese correo");
             }
-            throw CustomError.internalServer(`Error al crear producto: ${error.message}`);
+            throw CustomError.internalServer(`Error al crear usuario: ${error.message}`);
         }
     }
 
