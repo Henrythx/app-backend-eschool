@@ -15,6 +15,7 @@ export class UsuarioRouter {
         router.get      ("/:id"     , controller.findById   );
         router.post     ("/"        , controller.create     );
         router.put      ("/:id"     , controller.update     );
+        router.patch    ("/:id"     , controller.patch      );
         router.delete   ("/:id"     , controller.deleteById );
 
         return router;

@@ -2,16 +2,15 @@ import { CustomError } from "../entities";
 import { Repository } from "../repositories/repository";
 import { Service } from "./service";
 
-export abstract class ServiceBase <TEntity, TCreateDTO, TUpdateDTO, 
-    TRepo extends Repository<TEntity, TCreateDTO, TUpdateDTO>> 
-implements Service <TEntity, TCreateDTO, TUpdateDTO>
+export abstract class ServiceBase <TEntity, TCreateDTO, TUpdateDTO, TPatchDTO, 
+    TRepo extends Repository<TEntity, TCreateDTO, TUpdateDTO, TPatchDTO>> 
+implements Service <TEntity, TCreateDTO, TUpdateDTO, TPatchDTO>
 {
 
 
     constructor (
         protected readonly repo: TRepo
     ){}
-
 
 
     async findById(id: number): Promise<TEntity | null> {
@@ -36,6 +35,12 @@ implements Service <TEntity, TCreateDTO, TUpdateDTO>
 
     update(dto: TUpdateDTO): Promise<TEntity> {
         return this.repo.update(dto);
+    }
+
+
+
+    patch(dto: TPatchDTO): Promise<TEntity> {
+        return this.repo.patch(dto);
     }
 
 

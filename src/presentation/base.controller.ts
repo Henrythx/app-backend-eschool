@@ -3,11 +3,12 @@ import { Service } from "../domain/service/service";
 import { CustomError } from "../domain/entities";
 import { DTOClass } from "../domain/dto/dto";
 
-export abstract class Controller <TEntity, TCreateDTO, TUpdateDTO>{
+export abstract class Controller <TEntity, TCreateDTO, TUpdateDTO, TPatchDTO>{
     constructor (
-        protected readonly service: Service<TEntity, TCreateDTO, TUpdateDTO>,
+        protected readonly service: Service<TEntity, TCreateDTO, TUpdateDTO, TPatchDTO>,
         private createDto: DTOClass<TCreateDTO>,
         private updateDto: DTOClass<TUpdateDTO>,
+        private patchDto: DTOClass<TPatchDTO>,
     ){}
 
     
@@ -17,6 +18,10 @@ export abstract class Controller <TEntity, TCreateDTO, TUpdateDTO>{
 
     protected updateDTO(obj: any): TUpdateDTO {
         return this.updateDto.create(obj);
+    }
+
+    protected patchDTO(obj: any): TPatchDTO {
+        return this.patchDto.create(obj);
     }
 
     // protected abstract createDTO (obj: any) : TCreateDTO;
@@ -71,6 +76,19 @@ export abstract class Controller <TEntity, TCreateDTO, TUpdateDTO>{
             const dto = await this.updateDTO({...req.body, id: +req.params.id});
             console.log("controller basico - update - dto", dto);
             const resultado = await this.service.update(dto);
+
+            res.json(resultado);
+        } catch (err) { this.handleError(err, res)}
+    }
+
+
+
+
+    public patch = async (req: Request, res: Response) => {
+        try {
+            const dto = await this.patchDTO({...req.body, id: +req.params.id});
+            console.log("controller basico - patch - dto", dto);
+            const resultado = await this.service.patch(dto);
 
             res.json(resultado);
         } catch (err) { this.handleError(err, res)}

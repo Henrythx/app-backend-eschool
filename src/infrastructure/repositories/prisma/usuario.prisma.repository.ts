@@ -1,5 +1,6 @@
 import { prisma } from "../../../config/prisma";
 import { CreateUsuarioDTO } from "../../../domain/dto/usuario/create-usuario.dto";
+import { PatchUsuarioDTO } from "../../../domain/dto/usuario/patch-usuario.dto";
 import { UpdateUsuarioDTO } from "../../../domain/dto/usuario/update-usuario.dto";
 import { CustomError } from "../../../domain/entities/basicas/custom.error";
 import { UsuarioEntity } from "../../../domain/entities/basicas/usuario.entity";
@@ -80,6 +81,33 @@ export class UsuarioPrismaRepository implements UsuarioRepository{
         }
     }
 
+
+
+    async patch(dto: PatchUsuarioDTO): Promise<UsuarioEntity> {
+        try {
+            // Construimos dinámicamente el objeto data en el repositorio
+            const data = Object.fromEntries(
+                Object.entries(dto).filter(([key, value]) => key !== "id" && value !== undefined)
+            );
+
+            const usuario = await this.prisma.usuario.update({
+                where: { id: dto.id },
+                data
+            });
+
+            return UsuarioEntity.fromObject(usuario);
+        } catch (err: any) {
+            if (err.code === "P2002") {
+                throw CustomError.conflict("Ya existe un usuario con ese email o DNI");
+            }
+            if (err.code === "P2025") {
+                throw CustomError.notFound("Usuario no encontrado");
+            }
+            throw CustomError.internalServer("Error al actualizar parcialmente usuario: " + err.message);
+        }
+    }
+
+    
 
 
     async deleteById(id: number): Promise<UsuarioEntity | null> {

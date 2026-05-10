@@ -15,6 +15,7 @@ export class UpdateUsuarioDTO {
 
 
     static create(obj: {[key: string]: any}): UpdateUsuarioDTO{
+        console.log(obj);
         const { id, dni, nombre, apellido, email, passwordHash, rol, genero } = obj;
 
         if (!id || isNaN(Number(id))) 

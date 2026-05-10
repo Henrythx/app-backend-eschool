@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { MateriaService } from "../../domain/service/materia.service";
-import { MateriaPrismaRepository } from "../../infrastructure/repositories/prisma/materia.prisma.repository";
-import { MateriaController } from "./materia.controller";
+import { DocentePrismaRepository } from "../../infrastructure/repositories/prisma/docente.prisma.repository";
+import { DocenteService } from "../../domain/service/docente.service";
+import { DocenteController } from "./docente.controller";
 
-export class MateriaRouter {
+export class DocenteRouter {
     static get routes(): Router {
         const router = Router();
 
-        const repositorio   = new MateriaPrismaRepository();
-        const service       = new MateriaService(repositorio);
-        const controller    = new MateriaController(service);
+        const repositorio   = new DocentePrismaRepository();
+        const service       = new DocenteService(repositorio);
+        const controller   = new DocenteController(service);
 
         router.get      ("/"        , controller.findAll        );
         router.get      ("/:id"     , controller.findById       );
@@ -17,7 +17,6 @@ export class MateriaRouter {
         router.put      ("/:id"     , controller.update         );
         router.patch    ("/:id"     , controller.patch          );
         router.delete   ("/:id"     , controller.deleteById     );
-        router.get      ("/areas/lista/"  , controller.getAreas       );
 
         return router;
     }

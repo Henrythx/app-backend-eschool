@@ -4,6 +4,7 @@ import { CreateMateriaDTO } from "../../../domain/dto/materia/create-materia.dto
 import { UpdateMateriaDTO } from "../../../domain/dto/materia/update-materia.dto";
 import { AreaEntity, CustomError, MateriaEntity } from "../../../domain/entities";
 import { MateriaRepository } from "../../../domain/repositories/materia.repository";
+import { PatchMateriaDTO } from "../../../domain/dto/materia/patch-materia.dto";
 
 
 export class MateriaPrismaRepository implements MateriaRepository {
@@ -15,11 +16,14 @@ export class MateriaPrismaRepository implements MateriaRepository {
         const areas = await this.prisma.area.findMany();
         return areas.map(AreaEntity.fromObject);
     }
-    
 
 
     async findAllByAreaId(id: number): Promise<MateriaEntity[]> {
-        throw new Error("Method not implemented.");
+        const materias = await this.prisma.materia.findMany({
+            where: { areaId: id },
+            include: { area: true }
+        });
+        return materias.map(MateriaEntity.fromObject);
     }
 
 
@@ -87,6 +91,32 @@ export class MateriaPrismaRepository implements MateriaRepository {
         }
     }
 
+
+
+
+    async patch(dto: PatchMateriaDTO): Promise<MateriaEntity> {
+        try {
+            const data = Object.fromEntries(
+                Object.entries(dto).filter(([key, value]) => key !== "id" && value !== undefined)
+            );
+
+            const materia = await this.prisma.materia.update({
+                where: { id: dto.id },
+                data,
+                include: { area: true }
+            });
+
+            return MateriaEntity.fromObject(materia);
+        } catch (err: any) {
+            if (err.code === "P2002") {
+                throw CustomError.conflict("Ya existe una materia con ese nombre");
+            }
+            if (err.code === "P2025") {
+                throw CustomError.notFound("Materia no encontrada");
+            }
+            throw CustomError.internalServer("Error al actualizar parcialmente la materia: " + err.message);
+        }
+    }
 
 
 

@@ -1,5 +1,6 @@
 import { prisma } from "../../../config/prisma";
 import { CreateGradoDTO } from "../../../domain/dto/grado/create-grado.dto";
+import { PatchGradoDTO } from "../../../domain/dto/grado/patch-grado.dto";
 import { UpdateGradoDTO } from "../../../domain/dto/grado/update-grado.dto";
 import { MateriaEntity, GradoEntity, CustomError } from "../../../domain/entities";
 import { GradoRepository } from "../../../domain/repositories/grado.repository";
@@ -10,10 +11,18 @@ export class GradoPrismaRepository implements GradoRepository {
 
 
 
-    getMateriasByGradoId(id: number): Promise<MateriaEntity[]> {
-        throw new Error("Method not implemented.");
+    async getMateriasByGradoId(id: number): Promise<MateriaEntity[]> {
+        const grado = await this.prisma.grado.findUnique({
+            where: { id },
+            include: { materias: { include: { materia: true } }}
+        });
+
+        if (!grado) throw CustomError.notFound("Grado no encontrado");
+
+        return grado.materias.map(gm => MateriaEntity.fromObject(gm.materia));    
     }
 
+    
 
     async findById(id: number): Promise<GradoEntity | null> {
         const grado = await this.prisma.grado.findUnique({
@@ -98,7 +107,54 @@ export class GradoPrismaRepository implements GradoRepository {
 
 
 
-    deleteById(id: number): Promise<GradoEntity | null> {
-        throw new Error("Method not implemented.");
+    
+    async patch(dto: PatchGradoDTO): Promise<GradoEntity> {
+        try {
+            const data = Object.fromEntries(
+                Object.entries(dto).filter(([key, value]) => 
+                    key !== "id" && 
+                    key !== "materiasIds" && 
+                    value !== undefined
+                )
+            );
+            
+            // Si se incluye materiasIds, hay que manejarlo distinto
+            if (dto.materiasIds) {
+                data.materias = {
+                    deleteMany: {},
+                    create: dto.materiasIds.map(id => ({ materia: { connect: { id } } }))
+                }
+            }
+
+            const grado = await this.prisma.grado.update({
+                where: { id: dto.id },
+                data,
+                include: { materias: { include: { materia: { include: { area: true } } } } }
+            });
+
+            return GradoEntity.fromObject(grado);
+        } catch (err: any) {
+            if (err.code === "P2025") {
+                throw CustomError.notFound("Grado no encontrado");
+            }
+            throw CustomError.internalServer("GradoRepository: Error al actualizar parcialmente el grado: " + err.message);
+        }
+    }
+
+
+
+    async deleteById(id: number): Promise<GradoEntity | null> {
+        try {
+            const deleted = await this.prisma.grado.delete({
+                where: { id },
+                include: { materias: { include: { materia: { include: { area: true } } } } }
+            });
+            return GradoEntity.fromObject(deleted);
+        } catch (err: any) {
+            if (err.code === "P2025") {
+                throw CustomError.notFound("Grado no encontrado");
+            }
+            throw CustomError.internalServer("Error al eliminar el grado: " + err.message);
+        }
     }
 }

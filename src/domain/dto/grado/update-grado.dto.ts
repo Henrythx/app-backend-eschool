@@ -20,9 +20,9 @@ export class UpdateGradoDTO {
         
         if (!year || isNaN(Number(year))) 
             throw CustomError.badRequest("UpdateGradoDTO: Year inválido");
-        
-        if (materiasIds && !Array.isArray(materiasIds)) {
-            throw CustomError.badRequest("UpdateGradoDTO: MateriasIds debe ser un array de números");
+
+        if (materiasIds && (!Array.isArray(materiasIds) || materiasIds.some(x => isNaN(Number(x))))) {
+            throw CustomError.badRequest("PatchGradoDTO: MateriasIds debe ser un array de números");
         }
         
         return new UpdateGradoDTO(Number(id), nivel, Number(year), materiasIds);

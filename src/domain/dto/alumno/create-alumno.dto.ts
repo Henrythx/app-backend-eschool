@@ -1,16 +1,17 @@
 import { CustomError } from "../../entities/basicas/custom.error";
+import { CreateUsuarioDTO } from "../usuario/create-usuario.dto";
 
 
 export class CreateAlumnoDTO {
     private constructor(
         public readonly fechaNacimiento : Date,
-        public readonly usuarioId       : number,
         public readonly gradoId         : number,
+        public readonly usuario: CreateUsuarioDTO,
     ) {}
 
 
     static create(obj: { [key: string]: any }): CreateAlumnoDTO {
-        const { fechaNacimiento, usuarioId, gradoId } = obj;
+        const { fechaNacimiento, gradoId } = obj;
 
         if (!fechaNacimiento) 
             throw CustomError.badRequest("Fecha de nacimiento requerida");
@@ -19,17 +20,14 @@ export class CreateAlumnoDTO {
         if (isNaN(fecha.getTime())) 
             throw CustomError.unprocessable("Fecha de nacimiento inválida");
 
-        if (!usuarioId || isNaN(Number(usuarioId))) 
-            throw CustomError.badRequest("UsuarioId inválido");
-
         if (!gradoId || isNaN(Number(gradoId))) 
             throw CustomError.badRequest("GradoId inválido");
 
 
         return new CreateAlumnoDTO(
-            fecha, 
-            Number(usuarioId), 
-            Number(gradoId)
+            fecha,
+            Number(gradoId),
+            CreateUsuarioDTO.create(obj.usuario)
         );
     }
 }
