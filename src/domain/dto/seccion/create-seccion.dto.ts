@@ -14,16 +14,16 @@ export class CreateSeccionDTO {
 
         
         if (!nombre || typeof nombre !== "string") 
-            throw CustomError.badRequest("Nombre inválido");
+            throw CustomError.badRequest("CreateSeccionDTO: Nombre inválido");
 
         if (!gradoId || isNaN(Number(gradoId))) 
-            throw CustomError.badRequest("GradoId inválido");
+            throw CustomError.badRequest("CreateSeccionDTO: GradoId inválido");
 
         if (!tutorId || isNaN(Number(tutorId))) 
-            throw CustomError.badRequest("TutorId inválido");
+            throw CustomError.badRequest("CreateSeccionDTO: TutorId inválido");
 
         if (!year || isNaN(Number(year))) 
-            throw CustomError.badRequest("Year inválido");
+            throw CustomError.badRequest("CreateSeccionDTO: Year inválido");
 
 
         return new CreateSeccionDTO(
